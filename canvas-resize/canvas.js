@@ -20,4 +20,22 @@ c.lineTo(400, 300);
 c.strokeStyle = '#fa34a3';
 c.stroke();
 
-console.log(canvas);
+// Arc
+// c.beginPath();
+// c.arc(300, 300, 50, 0, Math.PI * 2, false);
+// c.strokeStyle = 'green';
+// c.stroke();
+
+// Loop
+for (var i = 0; i < 1000; i++) {
+    var r = Math.random() * 255;
+    var g = Math.random() * 255;
+    var b = Math.random() * 255;
+    var x = Math.random() * window.innerWidth;
+    var y = Math.random() * window.innerHeight;
+    c.beginPath();
+    c.arc(x, y, 30, 0, Math.PI * 2, false);
+    c.strokeStyle = `rgba(${r}, ${g}, ${b}, 1)`;
+    c.stroke();
+
+}
