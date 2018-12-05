@@ -10,7 +10,7 @@ function randomColor(colors) {
 function distance(x1, y1, x2, y2) {
 	const xDist = x2 - x1;
 	const yDist = y2 - y1;
-	
+
 	return Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2));
 }
 
@@ -28,16 +28,35 @@ const mouse = {
 
 const colors = ['#2185c5', '#7ecefd', '#fff6e5', '#ff7f66'];
 
-// Event listeners
-addEventListener('mousemove', event => {
-	mouse.x = event.clientX;
-	mouse.y = event.clientY;
-});
+// Event listeners for desktop
+// document.addEventListener('touchmove', event => {
+// 	mouse.x = event.clientX;
+// 	mouse.y = event.clientY;
+// 	console.log(mouse.x, mouse.y);
+// });
 
-addEventListener('resize', () => {
+// Event listners for touch device
+document.addEventListener('touchstart', event => {
+	mouse.x = event.touches[0].clientX;
+	mouse.y = event.touches[0].clientY;
+}, false);
+
+// Event listners for touch device
+document.addEventListener('touchmove', event => {
+	mouse.x = event.touches[0].clientX;
+	mouse.y = event.touches[0].clientY;
+}, false);
+
+// Event listners for touch device
+document.addEventListener('touchend', event => {
+	mouse.x = event.changedTouches[0].clientX;
+	mouse.y = event.changedTouches[0].clientY;
+}, false);
+
+document.addEventListener('resize', () => {
 	canvas.width = innerWidth;
 	canvas.height = innerHeight;
-	
+
 	init();
 });
 
@@ -64,7 +83,7 @@ Object.prototype.update = function() {
 let objects
 function init() {
 	objects = [];
-	
+
 	for (let i = 0; i < 400; i++) {
 		// objects.push();
 	}
@@ -74,7 +93,7 @@ function init() {
 function animate() {
 	requestAnimationFrame(animate);
 	c.clearRect(0, 0, canvas.width, canvas.height);
-	
+
 	c.fillText('HTML CANVAS BOILERPLATE', mouse.x, mouse.y);
 	// objects.forEach(object => {
 	// 	object.update();
