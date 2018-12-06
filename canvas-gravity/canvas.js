@@ -61,13 +61,18 @@ document.addEventListener('resize', () => {
 });
 
 // Objects
-function Ball(x, y, radius, color) {
+function Ball(x, y, dy, radius, color) {
 	this.x = x;
 	this.y = y;
+	this.dy = dy;
 	this.radius = radius;
 	this.color = color;
 	
 	this.update = function() {
+		if (this.y + this.radius >= canvas.height) {
+			this.dy = -this.dy;
+		}
+		this.y += this.dy;
 		this.draw();
 	}
 	
@@ -87,13 +92,10 @@ function Ball(x, y, radius, color) {
 //}
 
 // Implementation
-let objects;
-function init() {
-	objects = [];
+var ball;
 
-	for (let i = 0; i < 400; i++) {
-		// objects.push();
-	}
+function init() {
+	ball = new Ball(canvas.width / 2, canvas.height / 2, 2, 30, 'red');
 }
 
 // Animation Loop
@@ -101,10 +103,9 @@ function animate() {
 	requestAnimationFrame(animate);
 	c.clearRect(0, 0, canvas.width, canvas.height);
 
-	c.fillText('ははは ついて来れるかな？', mouse.x, mouse.y);
-	// objects.forEach(object => {
-	// 	object.update();
-	// });
+	c.fillText('HTML CANVAS BOILERPLATE', mouse.x, mouse.y);
+	
+	ball.update();
 }
 
 init();
