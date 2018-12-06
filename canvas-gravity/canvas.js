@@ -61,26 +61,33 @@ document.addEventListener('resize', () => {
 });
 
 // Objects
-function Object(x, y, radius, color) {
+function Ball(x, y, radius, color) {
 	this.x = x;
 	this.y = y;
 	this.radius = radius;
 	this.color = color;
+	
+	this.update = function() {
+		this.draw();
+	}
+	
+	this.draw = function() {
+		c.beginPath();
+		c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+		c.fillStyle = this.color;
+		c.fill();
+		c.closePath();
+	}
 }
 
-Object.prototype.draw = function() {
-	c.beginPath();
-	c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-	c.fill();
-	c.closePath();
-}
 
-Object.prototype.update = function() {
-	this.draw();
-}
+
+//Object.prototype.update = function() {
+	//this.draw();
+//}
 
 // Implementation
-let objects
+let objects;
 function init() {
 	objects = [];
 
@@ -94,7 +101,7 @@ function animate() {
 	requestAnimationFrame(animate);
 	c.clearRect(0, 0, canvas.width, canvas.height);
 
-	c.fillText('HTML CANVAS BOILERPLATE', mouse.x, mouse.y);
+	c.fillText('ははは ついて来れるかな？', mouse.x, mouse.y);
 	// objects.forEach(object => {
 	// 	object.update();
 	// });
