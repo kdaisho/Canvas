@@ -27,7 +27,8 @@ const mouse = {
 };
 
 const colors = ['#2185c5', '#7ecefd', '#fff6e5', '#ff7f66'];
-
+const gravity = 1;
+const friction = .99;
 // Event listeners for desktop
 // document.addEventListener('touchmove', event => {
 // 	mouse.x = event.clientX;
@@ -61,17 +62,25 @@ document.addEventListener('resize', () => {
 });
 
 // Objects
-function Ball(x, y, dy, radius, color) {
+function Ball(x, y, dx, dy, radius, color) {
 	this.x = x;
 	this.y = y;
+	this.dx = dx;
 	this.dy = dy;
 	this.radius = radius;
 	this.color = color;
 	
 	this.update = function() {
-		if (this.y + this.radius >= canvas.height) {
-			this.dy = -this.dy;
+		if (this.y + this.radius + this.dy >= canvas.height) {
+			this.dy = -this.dy * friction;
 		}
+		else {
+			this.dy += gravity;
+		}
+		if (this.x + this.radius + this.dx >= canvas.width || this.x - this.radius < 0) {
+			this.dx = -this.dx;
+		}
+		this.x += this.dx;
 		this.y += this.dy;
 		this.draw();
 	}
@@ -81,29 +90,41 @@ function Ball(x, y, dy, radius, color) {
 		c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
 		c.fillStyle = this.color;
 		c.fill();
+		c.stroke();
 		c.closePath();
 	}
 }
-
-
 
 //Object.prototype.update = function() {
 	//this.draw();
 //}
 
 // Implementation
-var ball;
+let ball;
+const ballArray = [];
 
 function init() {
-	ball = new Ball(canvas.width / 2, canvas.height / 2, 2, 30, 'red');
+	const radius = 30;
+	for (let i = 0; i < 100; i++) {
+		const x = randomIntFromRange(radius, canvas.width - radius);
+		const y = randomIntFromRange(0, canvas.height - radius);
+		const dx = randomIntFromRange(-2, 2);
+		ballArray.push(new Ball(x, y, dx, 2, radius, 'red'));
+	}
+	//ball = new Ball(canvas.width / 2, canvas.height / 2, 2, 30, 'red');
+	//console.log(ballArray);
 }
 
 // Animation Loop
 function animate() {
 	requestAnimationFrame(animate);
 	c.clearRect(0, 0, canvas.width, canvas.height);
+	
+	for (let i = 0; i < ballArray.length; i++) {
+		ballArray[i].update();
+	}
 
-	c.fillText('HTML CANVAS BOILERPLATE', mouse.x, mouse.y);
+	//c.fillText('HTML CANVAS BOILERPLATE', mouse.x, mouse.y);
 	
 	ball.update();
 }
