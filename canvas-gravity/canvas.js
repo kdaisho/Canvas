@@ -28,7 +28,8 @@ const mouse = {
 
 const colors = ['#2185c5', '#7ecefd', '#fff6e5', '#ff7f66'];
 const gravity = 1;
-const friction = .99;
+const frictionX = .99;
+const frictionY = .75;
 // Event listeners for desktop
 // document.addEventListener('touchmove', event => {
 // 	mouse.x = event.clientX;
@@ -61,6 +62,10 @@ document.addEventListener('resize', () => {
 	init();
 });
 
+document.addEventListener('touchstart', () => {
+	init();
+});
+
 // Objects
 function Ball(x, y, dx, dy, radius, color) {
 	this.x = x;
@@ -72,13 +77,14 @@ function Ball(x, y, dx, dy, radius, color) {
 	
 	this.update = function() {
 		if (this.y + this.radius + this.dy >= canvas.height) {
-			this.dy = -this.dy * friction;
+			this.dy = -this.dy * frictionY;
+			this.dx *= frictionX;
 		}
 		else {
 			this.dy += gravity;
 		}
 		if (this.x + this.radius + this.dx >= canvas.width || this.x - this.radius < 0) {
-			this.dx = -this.dx;
+			this.dx = -this.dx * frictionX;
 		}
 		this.x += this.dx;
 		this.y += this.dy;
@@ -100,16 +106,18 @@ function Ball(x, y, dx, dy, radius, color) {
 //}
 
 // Implementation
-let ball;
-const ballArray = [];
+//let ball;
+let ballArray = [];
 
 function init() {
-	const radius = 30;
-	for (let i = 0; i < 100; i++) {
+	ballArray = [];
+	for (let i = 0; i < 400; i++) {
+		const radius = randomIntFromRange(8, 20);
 		const x = randomIntFromRange(radius, canvas.width - radius);
 		const y = randomIntFromRange(0, canvas.height - radius);
-		const dx = randomIntFromRange(-2, 2);
-		ballArray.push(new Ball(x, y, dx, 2, radius, 'red'));
+		const dx = randomIntFromRange(-4, 4);
+		const color = randomColor(colors);
+		ballArray.push(new Ball(x, y, dx, 2, radius, color));
 	}
 	//ball = new Ball(canvas.width / 2, canvas.height / 2, 2, 30, 'red');
 	//console.log(ballArray);
@@ -126,7 +134,7 @@ function animate() {
 
 	//c.fillText('HTML CANVAS BOILERPLATE', mouse.x, mouse.y);
 	
-	ball.update();
+	//ball.update();
 }
 
 init();
